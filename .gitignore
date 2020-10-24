@@ -2,3 +2,7 @@
 
 # Recursively ignore config files
 /**/config/*
+*.lock
+
+# macOS Files
+*.DS_Store
