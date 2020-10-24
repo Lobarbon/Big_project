@@ -19,3 +19,8 @@ gem 'rubocop'
 
 # Utilities
 gem 'rake'
+
+group :development, :test do
+    gem 'vcr'
+    gem 'webmock'
+end
