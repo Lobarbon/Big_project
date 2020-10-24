@@ -1,7 +1,7 @@
 # Team7 2020 SOA Project
 
 ## Usage
-Please run `bunlde install` at the very first time.
+Please run `bundle install` at the very first time.
 
 ## Language of the Domain
 original JSON description -> our YAML description
