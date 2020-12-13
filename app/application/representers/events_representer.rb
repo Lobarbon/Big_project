@@ -14,7 +14,7 @@ module IndieLand
 
       collection :events,
                  extend: Representer::Event,
-                 class: Response::OpenStructWithLinks
+                 class: OpenStructWithLinks
     end
   end
 end
