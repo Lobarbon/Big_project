@@ -4,7 +4,7 @@ require 'dry/transaction'
 
 module IndieLand
   module Service
-    # Analyzes contributions to a project
+    # Analyzes sessions to a event
     # :reek:InstanceVariableAssumption
     # :reek:TooManyStatements
     # :reek:UncommunicativeVariableName
@@ -13,37 +13,39 @@ module IndieLand
     class GetEvents
       include Dry::Transaction
 
-      step :find_events_from_api
-      step :write_back_to_database
-      step :find_future_events
+      # step :validate_evnets
+      step :retrieve_events
+      step :reify_events
 
-      def find_events_from_api(input)
-        input[:logger].info('Getting events from api')
-        events = MusicEventsMapper.new.find_events
-        Success(events: events, logger: input[:logger])
+      private
+
+      # def validate_evnets(input)
+      #   input[:logger].info('Getting events from Indie Land Api')
+      #   events = MusicEventsMapper.new.find_events
+      #   Success(events: events, logger: input[:logger])
+      # rescue StandardError => e
+      #   input[:logger].error(e.backtrace.join("\n"))
+      #   Failure('Error occurs at fetching api')
+      # end
+
+      # get json data from api
+      def retrieve_events(input)
+        input[:logger].info('Calling Indie Land api and get json')
+        result = Gateway::IndieLandApi.new(IndieLand::App.config)
+                                      .events(input)
+        result.success? ? Success(result.payload) : Failure(result.message)
       rescue StandardError => e
         input[:logger].error(e.backtrace.join("\n"))
-        Failure('Error occurs at fetching api')
+        Failure('Error occurs at calling Indie Land Api')
       end
 
-      def write_back_to_database(input)
-        input[:logger].info('Writting events back to database')
-        Repository::For.entity(input[:events][0]).create_many(input[:events])
-
-        Success(logger: input[:logger])
-      rescue StandardError => e
-        input[:logger].error(e.backtrace.join("\n"))
-        Failure('Error occurs at writing data back')
-      end
-
-      def find_future_events(input)
-        input[:logger].info('Finding future events from database')
-        future_events = Repository::Events.future_events
-
-        Success(future_events)
-      rescue StandardError => e
-        input[:logger].error(e.backtrace.join("\n"))
-        Failure('Error occurs at finding future events')
+      # make json back into an object
+      def reify_events(events_json)
+        Representer::RangeEvents.new(OpenStruct.new)
+                                .from_json(events_json)
+                                .then { |daily_events| Success(daily_events) }
+      rescue StandardError
+        Failure('Error in our events report  -- please try again')
       end
     end
   end

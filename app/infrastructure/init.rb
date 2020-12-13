@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-folders = %w[database gateways]
-folders.each do |folder|
-  require_relative "#{folder}/init.rb"
+Dir.glob("#{__dir__}/*.rb").sort.each do |file|
+  require file
 end
