@@ -27,5 +27,9 @@ module Views
     def event_name
       @brief_hash[:event_name]
     end
+
+    def session_id
+      @brief_hash[:session_id]
+    end
   end
 end

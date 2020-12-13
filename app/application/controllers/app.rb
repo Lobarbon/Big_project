@@ -7,6 +7,7 @@ require 'json'
 # Routing entry
 module IndieLand
   # Main routing rules
+  # :reek:RepeatedConditional
   class App < Roda
     logger = AppLogger.instance.get
 
@@ -39,8 +40,7 @@ module IndieLand
 
         result = Service::GetEvents.new.call(logger: logger)
         flash.now[:error] = result.failure if result.failure?
-
-        future_events = result.value!
+        future_events = result.value!.range_events
 
         viewable_events = Views::FutureEvents.new(future_events)
         view 'home/index', locals: {
@@ -51,8 +51,11 @@ module IndieLand
 
       routing.on 'room' do
         routing.get Integer do |event_id|
-          event = IndieLand::Repository::Events.find_id(event_id)
-          viewable_event_sessions = Views::EventSessionsList.new(event)
+          result = Service::EventSessions.new.call(event_id)
+          flash.now[:error] = result.failure if result.failure?
+          event_sessions = result.value!
+
+          viewable_event_sessions = Views::EventSessionsList.new(event_sessions)
 
           view 'room/index', locals: {
             sessions: viewable_event_sessions
