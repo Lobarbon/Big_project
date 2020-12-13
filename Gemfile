@@ -13,6 +13,10 @@ gem 'rack', '~> 2.2.3' # 2.3 will fix delegateclass bug
 gem 'roda', '~> 3.8' # web app framework
 gem 'tilt', '~> 2.0.6' # Template engine
 
+# Representers
+gem 'multi_json'
+gem 'roar'
+
 # Type validation
 gem 'dry-struct', '~> 1.3'
 gem 'dry-types', '~> 1.4'
