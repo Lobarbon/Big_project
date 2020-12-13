@@ -1,37 +1,46 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
-# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+# API testing workflow config for CI/CD on Github
 
-name: Ruby
+name: API continuous integration
 
+# Controls when the action will run. 
 on:
+  # Triggers the workflow for master branch on git push
   push:
-    branches: [ master ]
+    branches: [master]
+  # Triggers workflow for or any branch on pull requests
   pull_request:
-    branches: [ master ]
+    branches:
+      - '**'
+  # Allows running this workflow manually from the Actions tab
+  workflow_dispatch:
 
+# A workflow is defined of one or more jobs that can run sequentially or in parallel
 jobs:
-  test:
+  # This workflow contains a single job called "api_test"
+  api_test:
+    strategy:
+      # don't cancel other jobs if one fails
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos]
+    runs-on: ${{ matrix.os }}-latest  # Runs on latest builds of matrix OSes
 
-    runs-on: ubuntu-latest
-
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-    # uses: ruby/setup-ruby@v1
-      uses: ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
-      with:
-        ruby-version: 2.7.1
-    - name: Install dependencies
-      run: bundle install
-    - name: Migrate Database
-      run: bundle exec rake db:migrate
-    - name: Run tests
-      run: bundle exec rake spec
-    - name: Run all quality checks
-      run: bundle exec rake check:ci_all
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+    
+      # Builds on a predefined action that has Ruby installed 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+      - name: Install dependencies
+        run: bundle install
+        
+      - name: Run tests
+        env: # define secrets in Github project -> settings -> secrets
+          SESSION_SECRET: ${{ secrets.SESSION_TOKEN }}
+        run: RACK_ENV=test bundle exec rake spec
+
+      - name: Run all quality checks
+        run: bundle exec rake check:ci_all
