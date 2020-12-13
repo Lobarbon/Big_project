@@ -11,10 +11,6 @@ GEM
     data_magic (1.2)
       faker (>= 1.1.2)
       yml_reader (>= 0.6)
-<<<<<<< HEAD
-    database_cleaner (1.8.5)
-=======
->>>>>>> app_only_you
     declarative (0.0.20)
     declarative-option (0.1.0)
     docile (1.3.2)
