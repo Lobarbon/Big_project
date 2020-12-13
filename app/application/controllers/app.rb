@@ -7,6 +7,7 @@ require 'json'
 # Routing entry
 module IndieLand
   # Main routing rules
+  # :reek:RepeatedConditional
   class App < Roda
     logger = AppLogger.instance.get
 

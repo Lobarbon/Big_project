@@ -21,6 +21,8 @@ module IndieLand
       end
 
       # HTTP request transmitter
+      # :reek:TooManyStatements
+      # :reek:UtilityFunction
       class Request
         def initialize(config)
           @api_host = config.API_HOST
@@ -55,6 +57,7 @@ module IndieLand
       end
 
       # Decorates HTTP responses with success/error
+      # :reek:IrresponsibleModule
       class Response < SimpleDelegator
         NotFound = Class.new(StandardError)
 

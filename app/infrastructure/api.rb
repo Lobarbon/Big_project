@@ -38,7 +38,7 @@ module IndieLand
           call_api('get')
         end
 
-        def get_events(input)
+        def get_events(_input)
           call_api('get', ['events'])
         end
 

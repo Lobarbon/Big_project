@@ -16,13 +16,6 @@ gem 'tilt', '~> 2.0.6' # Template engine
 # Representers
 gem 'multi_json'
 gem 'roar'
-<<<<<<< HEAD
-
-# Type validation
-gem 'dry-struct', '~> 1.3'
-gem 'dry-types', '~> 1.4'
-=======
->>>>>>> app_only_you
 
 # Controllers and services
 gem 'dry-monads'
