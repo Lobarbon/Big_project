@@ -1,6 +1,6 @@
 coverage/*
 !coverage/.resultset.json
-
+public/*
 .irb_history
 
 # Recursively ignore config files

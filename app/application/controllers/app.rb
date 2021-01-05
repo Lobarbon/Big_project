@@ -17,26 +17,27 @@ module IndieLand
     plugin :hash_routes
 
     plugin :render, views: './app/presentation/views/', escape: true
-    plugin :assets, path: './app/presentation/assets'
+    plugin :assets, path: './app/presentation/assets/', css: ['style.css']
+    compile_assets
     # rubocop:disable Metrics/BlockLength
     route do |routing|
       routing.public
-      # routing.assets
+      routing.assets
       routing.hash_routes
 
       routing.root do
         session[:user] ||= ''
-
+        @title = 'home'
         logger.info("User #{session[:user]} enter")
         # deal with user sessions
-        # result = Service::TrackUser.new.call(user_id: session[:user], logger: logger)
-        # if result.failure?
-        #   flash.now[:error] = result.failure
-        #   login_number = 0
-        # else
-        #   session[:user] = result.value![:user_id]
-        #   login_number = result.value![:login_number]
-        # end
+        result = Service::TrackUser.new.call(user_id: session[:user], logger: logger)
+        if result.failure?
+          flash.now[:error] = result.failure
+          login_number = 0
+        else
+          session[:user] = result.value![:user_id]
+          login_number = result.value![:login_number]
+        end
 
         result = Service::GetEvents.new.call(logger: logger)
         flash.now[:error] = result.failure if result.failure?
@@ -49,7 +50,8 @@ module IndieLand
         }
       end
 
-      routing.on 'room' do
+      routing.on 'event' do
+        @title = 'event'
         routing.get Integer do |event_id|
           result = Service::EventSessions.new.call(event_id)
           flash.now[:error] = result.failure if result.failure?
@@ -57,7 +59,7 @@ module IndieLand
 
           viewable_event_sessions = Views::EventSessionsList.new(event_sessions)
 
-          view 'room/index', locals: {
+          view 'event/index', locals: {
             sessions: viewable_event_sessions
           }
         end
