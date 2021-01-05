@@ -1,163 +1,107 @@
 * {
 	padding: 0;
-	margin: 0;
+    margin: 0;
 }
 
-html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
+html, body{
     height: 100%;
-    overflow: hidden;
-    font-family: "Monument Extended", Arial, Helvetica, sans-serif;
+    background-color: #192734;
 }
 
-body {
-    color: white;
-    margin: 0;
-    padding: 0;
-    perspective: 1px;
-    transform-style: preserve-3d;
-    height: 100%;
-    width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+.main-scroll{
+    height: 90vh;
+    overflow: auto;
 }
-
-header {
-    box-sizing: border-box;
-    min-height: 100vh;
-    position: relative;
-    transform-style: inherit;
-    width: 100vw;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-header .search {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-header p {
-    position: absolute;
-    margin: 0;
-    left: 5%;
-    top: 5%;
-    font: 5em sans-serif;
-    font-family: 'Press Start 2P', cursive;
-    /* font-family: 'Spectral SC', serif; */
-}
-
-header button{
-    margin: 0;
-    position: absolute;
-    top: 80%;
-    left: 47%;
-}
-
-input:focus{
-    outline:none
-}
-header, header:before {
-    background: 50% 50% / cover;
-}
-
-header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: block;
-    /* background: url(http://127.0.0.1:9292/images/top-bg.jpg); */
-    background-color: black;
-    background-size: cover;
-    transform-origin: center center 0;
-    transform: translateZ(-1px) scale(2);
-    z-index: -1;
-    min-height: 100vh;
-}
-
-/* container */
-
-.container-f {
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    background: black;
-    position: absolute;
-    top: 100vh;
-    line-height: 30px;
-    font-weight: lighter;
-    color: white;
-    
-}
-
-.date-title{
-    text-decoration:underline;
-    font-family: 'Press Start 2P', cursive;
-}
-
-.sub-main{
-    padding: 0 20px;
-    height: 80%;
-    width: 60%;
-    overflow-x: hidden;
-    position: relative;
-    white-space: nowrap;
-    border-style: solid;
-}
-.sub-main::-webkit-scrollbar{
+.main-scroll::-webkit-scrollbar {
     display: none;
 }
 
-.link{
-    margin: 0 5px;
+.top-scroll{
+    height: 60vh;
+    overflow: auto;
+}
+.top-scroll::-webkit-scrollbar {
+    display: none;
 }
 
-.link a {
-    text-decoration:none;
-    display:block;
-    color: white;
-    display:block;
-    padding: 10px 0;
-    font-size: 20px;
-    font-family: 'Noto Serif TC', serif;
+.block-bg{
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    background-color: #15202B;
 }
 
-.link a:hover{
-    transition: color 0.5s linear;
-    color: rgb(255, 204, 128);
+.block-bg:hover{
+    background-color: #1C2732;
 }
 
-/* Triangle */
-.triangle{
+.like{
+    cursor: pointer;
+    transition: color 0.5s ease;
+}
+
+.like:hover{
+    color: #d45a6f;
+}
+
+.share{
+    cursor: pointer;
+    transition: color 0.5s ease;
+}
+
+.share:hover{
+    color: #5ad4a1;
+}
+
+.sinde-bar-img{
+    width: 40px;
+    -webkit-filter: invert(100%);
+}
+
+.sinde-bar-text:hover{
+    background-color: #16212c;
+}
+
+.re{
+    vertical-align: middle;
+    transform:rotate(-90deg);
+    -ms-transform:rotate(-90deg); /* Internet Explorer 9*/
+    -moz-transform:rotate(-90deg); /* Firefox */
+    -webkit-transform:rotate(-90deg); /* Safari 和 Chrome */
+    -o-transform:rotate(-90deg); /* Opera */
+}
+
+header{
     z-index: 1000;
-    border-bottom: 150px solid white;
-    border-left: 150px solid transparent;
-    bottom: 0;
-    right: 0;
+    width: auto;
+    height: auto;
     position: absolute;
-    
+    background-color: rgb(209, 168, 91);
+    top: 85vh;
+    left: 5vh;
 }
 
-.github-link{
-    width: 80px;
-    height: 80px;
-    z-index: 1001;
-    background-image: url(http://127.0.0.1:9292/images/GitHub-Mark-120px-plus.png);
-    background-size: 80px 80px;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-    cursor: pointer; 
+.link-block{
+    color: white;
 }
 
-.github-link:hover{
-    transition: border-bottom 0.5s linear;
-    border-bottom: rgb(255, 204, 128);
+.link-block:hover{
+    color:white;
+    text-decoration: none;
+}
+
+.commit-bg{
+    background-color: #15202B;
+}
+
+.btn-outline-primary {
+    color: #d45a6f;
+    background-color: transparent;
+    background-image: none;
+    border-color: #d45a6f
+}
+
+.btn-outline-primary:hover {
+    color: white;
+    background-color: #d45a6f;
+    border-color: #d45a6f
 }

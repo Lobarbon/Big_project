@@ -29,14 +29,14 @@ module IndieLand
 
         logger.info("User #{session[:user]} enter")
         # deal with user sessions
-        result = Service::TrackUser.new.call(user_id: session[:user], logger: logger)
-        if result.failure?
-          flash.now[:error] = result.failure
-          login_number = 0
-        else
-          session[:user] = result.value![:user_id]
-          login_number = result.value![:login_number]
-        end
+        # result = Service::TrackUser.new.call(user_id: session[:user], logger: logger)
+        # if result.failure?
+        #   flash.now[:error] = result.failure
+        #   login_number = 0
+        # else
+        #   session[:user] = result.value![:user_id]
+        #   login_number = result.value![:login_number]
+        # end
 
         result = Service::GetEvents.new.call(logger: logger)
         flash.now[:error] = result.failure if result.failure?

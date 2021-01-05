@@ -1,25 +1,46 @@
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <h1 class="display-4">Indie Land</h1>
-        <p class="lead">Get Indie Music Information, Encourage singers, Share your comments</p>
-        <a class="btn btn-secondary btn-sm" href="https://github.com/Lobarbon/Indie-Land" role="button"><i class="fab fa-github"></i> GitHub</a>
+    <div class="col border-left border-right border-warning">
+        <div class="d-flex flex-column text-white">
+            <div class="p-2 h3 mb-4 border-bottom border-warning">HOME </div>
+            <div class="main-scroll">  
+                <a class="link-block" href="event">
+                    <div class="p-2 h3 border-bottom border-warning">
+                        <div class="block-bg">
+                            <div class="card-header">Header</div>
+                            <div class="card-body">
+                            <h5 class="card-title">Time</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <footer class="text-center text-muted h5">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="align-bottom share">comment</div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="align-bottom like">like</div>
+                                    </div>
+                                </div>
+                            </footer>
+                            </div>
+                        </div>
+                    </div>
+                </a>                     
+            </div>
+        </div>
     </div>
-</div>
-
-<div class="container">
-    <% if login_number %>
-        <div class="text-right">Your number of login: <%==login_number %></div>
-    <% end %>
-    <% future_events.each do |event| %>
-        <h2 class="date-title mt-5" id=<%== event.date_html_id %>><%== event.date %></h2>
-        <ul class="list-group-flush">
-            <% event.each do |brief_hash|%>
-                <li class="list-group-item" id=<%== brief_hash.event_html_id %>>
-                    <a href=<%== brief_hash.event_href %> id=<%== brief_hash.event_html_link_id %>>
-                        ➣ <%== brief_hash.event_name %>
-                    </a>
-                </li>
-            <% end %>
-        </ul>
-    <% end %>
+    <div class="col-md-3 d-none d-sm-block">
+        <form class="m-3 form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        </form>
+        <div class="m-3 text-white h4 border-bottom">
+            Top 5 Hot!!!
+        </div>
+        <div class="top-scroll">
+        <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+            <div class="card-header">Header</div>
+            <div class="card-body">
+                <h5 class="card-title">Dark card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-outline-warning">more</a>
+            </div>
+        </div>
+    </div>
 </div>
