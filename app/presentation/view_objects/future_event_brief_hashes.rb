@@ -3,9 +3,10 @@
 module Views
   # View for a single event entity
   class BriefHashes
-    def initialize(brief_hash, index = nil)
+    def initialize(brief_hash, index = nil, date = nil)
       @brief_hash = brief_hash
       @index = index
+      @date = date
     end
 
     def event_html_id
@@ -13,7 +14,7 @@ module Views
     end
 
     def event_href
-      "room/#{event_id}"
+      "event/#{event_id}"
     end
 
     def event_html_link_id
@@ -26,6 +27,14 @@ module Views
 
     def event_name
       @brief_hash[:event_name]
+    end
+
+    def event_description
+      @brief_hash[:description]
+    end
+
+    def event_date
+      @date
     end
 
     def session_id

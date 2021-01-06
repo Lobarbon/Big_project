@@ -7,7 +7,7 @@ module Views
   class TodayEvents
     def initialize(date, events, index = nil)
       @index = index
-      @events = events.map.with_index { |brief_hash, id| BriefHashes.new(brief_hash, id) }
+      @events = events.map.with_index { |brief_hash, id| BriefHashes.new(brief_hash, id, date) }
       @date = date
     end
 

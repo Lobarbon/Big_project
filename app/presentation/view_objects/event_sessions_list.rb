@@ -15,6 +15,10 @@ module Views
       @event.event_name
     end
 
+    def date
+      @event.date
+    end
+
     def website
       @event.event_website
     end
