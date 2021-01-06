@@ -51,14 +51,14 @@ module IndieLand
       end
 
       routing.on 'event' do
-        @title = 'event'
         routing.get Integer do |event_id|
           result = Service::EventSessions.new.call(event_id)
           flash.now[:error] = result.failure if result.failure?
           event_sessions = result.value!
 
           viewable_event_sessions = Views::EventSessionsList.new(event_sessions)
-
+          @website = viewable_event_sessions.website
+          @title = 'event'
           view 'event/index', locals: {
             sessions: viewable_event_sessions
           }

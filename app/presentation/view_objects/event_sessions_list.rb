@@ -16,7 +16,7 @@ module Views
     end
 
     def date
-      @event.date
+      @sessions[0].start_time
     end
 
     def website
