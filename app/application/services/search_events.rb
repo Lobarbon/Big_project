@@ -24,7 +24,6 @@ module IndieLand
         puts ('Calling Indie Land api and get json')
         result = Gateway::IndieLandApi.new(IndieLand::App.config)
                                       .search(input)
-        puts result.success?
         result.success? ? Success(result.payload) : Failure(result.message)
       rescue StandardError => e
         puts e.backtrace.join("\n")
@@ -33,12 +32,10 @@ module IndieLand
 
       # make json back into an object
       def reify_events(events_json)
-        puts "reify"
-        puts events_json
         Success(events_json)
-        # Representer::RangeEvents.new(OpenStruct.new)
+        # Representer::QueryEvents.new(OpenStruct.new)
         #                         .from_json(events_json)
-        #                         .then { |daily_events| Success(daily_events) }
+        #                         .then { |query_events| Success(query_events) }
       rescue StandardError
         Failure('Error in our events report  -- please try again')
       end

@@ -52,6 +52,7 @@ module IndieLand
 
       routing.on 'events' do
         routing.get 'search' do
+          response['Content-Type'] = 'application/json'
           eventname = routing.params["q"]
           sresult = Service::SearchEvents.new.call(eventname)
           events = sresult.value!

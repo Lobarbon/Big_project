@@ -73,7 +73,6 @@ module IndieLand
         def call_search_api(method, resources = [], params = {})
           api_path = resources.empty? ? @api_host : @api_root
           url = "#{api_path}/#{resources[0]}?q=#{resources[1]}"
-          puts(url)
           HTTP.headers('Accept' => 'application/json').send(method, url)
               .then { |http_response| Response.new(http_response) }
         rescue StandardError
