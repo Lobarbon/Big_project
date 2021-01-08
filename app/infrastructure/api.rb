@@ -24,6 +24,10 @@ module IndieLand
         @request.get_sessions(event_id)
       end
 
+      def search(event_name)
+        @request.get_search_events(event_name)
+      end
+
       # HTTP request transmitter
       # :reek:DuplicateMethodCall
       # :reek:UtilityFunction
@@ -46,16 +50,30 @@ module IndieLand
           call_api('get', ['events', event_id])
         end
 
+        def get_search_events(event_name)
+          call_search_api('get', ['events/search', event_name])
+        end
+
         private
 
         def params_str(params)
           params.map { |key, value| "#{key}=#{value}" }.join('&')
-                .then { |str| str ? "?#{str}" : '' }
         end
 
         def call_api(method, resources = [], params = {})
           api_path = resources.empty? ? @api_host : @api_root
           url = [api_path, resources].flatten.join('/') + params_str(params)
+          puts(url)
+          HTTP.headers('Accept' => 'application/json').send(method, url)
+              .then { |http_response| Response.new(http_response) }
+        rescue StandardError
+          raise "Invalid URL request: #{url}"
+        end
+
+        def call_search_api(method, resources = [], params = {})
+          api_path = resources.empty? ? @api_host : @api_root
+          url = "#{api_path}/#{resources[0]}?q=#{resources[1]}"
+          puts(url)
           HTTP.headers('Accept' => 'application/json').send(method, url)
               .then { |http_response| Response.new(http_response) }
         rescue StandardError

@@ -50,6 +50,18 @@ module IndieLand
         }
       end
 
+      routing.on 'events' do
+        routing.get 'search' do
+          eventname = routing.params["q"]
+          sresult = Service::SearchEvents.new.call(eventname)
+          events = sresult.value!
+          # result = Gateway::IndieLandApi.new(IndieLand::App.config).search(eventname)                      
+          # puts(events)
+          # response.status 200
+          events
+        end
+      end
+
       routing.on 'event' do
         routing.get Integer do |event_id|
           result = Service::EventSessions.new.call(event_id)
