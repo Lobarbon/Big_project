@@ -50,6 +50,34 @@ module IndieLand
         }
       end
 
+      routing.on 'likes' do
+        # POST /likes/1
+        routing.get Integer do |event_id|
+          result = Service::ListLikes.new.call(event_id)
+          flash.now[:error] = result.failure if result.failure?
+          event_like = result.value!
+        end
+
+        # like that event
+        # GET /likes/1
+        routing.post Integer do |event_id|
+          result = Service::LikeEvent.new.call(event_id)
+          flash.now[:error] = result.failure if result.failure?
+          message = result.value!
+          # puts result
+        end
+      end
+
+      routing.on 'comments' do
+        routing.post Integer do |event_id|
+          response['Content-Type'] = 'application/json'
+          comment = routing.params["q"]
+          result = Service::CommentEvent.new.call(event_id: event_id, comment: comment)
+          flash.now[:error] = result.failure if result.failure?
+          message = result.value!
+        end
+      end
+
       routing.on 'events' do
         routing.get 'search' do
           response['Content-Type'] = 'application/json'

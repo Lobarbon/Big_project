@@ -24,8 +24,20 @@ module IndieLand
         @request.get_sessions(event_id)
       end
 
+      def event_likes(event_id)
+        @request.get_likes(event_id)
+      end
+
       def search(event_name)
         @request.get_search_events(event_name)
+      end
+
+      def add_comment(input)
+        @request.add_comment(input)
+      end
+
+      def add_like(event_id)
+        @request.add_like(event_id)
       end
 
       # HTTP request transmitter
@@ -50,8 +62,20 @@ module IndieLand
           call_api('get', ['events', event_id])
         end
 
+        def get_likes(event_id)
+          call_api('get', ['likes', event_id])
+        end
+
         def get_search_events(event_name)
           call_search_api('get', ['events/search', event_name])
+        end
+
+        def add_comment(input)
+          call_comment_api('post', ['comments', input[:event_id], input[:comment]])
+        end
+
+        def add_like(event_id)
+          call_api('post', ['likes', event_id])
         end
 
         private
@@ -78,7 +102,16 @@ module IndieLand
         rescue StandardError
           raise "Invalid URL request: #{url}"
         end
-      end
+
+        def call_comment_api(method, resources = [], params = {})
+          api_path = resources.empty? ? @api_host : @api_root
+          url = "#{api_path}/#{resources[0]}/#{resources[1]}?q=#{resources[2]}"
+          puts url
+          HTTP.headers('Accept' => 'application/json').send(method, url)
+              .then { |http_response| Response.new(http_response) }
+        rescue StandardError
+          raise "Invalid URL request: #{url}"
+        end
 
       # Decorates HTTP responses with success/error
       # :reek:TooManyStatements
@@ -102,4 +135,5 @@ module IndieLand
       end
     end
   end
+end
 end
