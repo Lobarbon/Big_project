@@ -40,6 +40,13 @@ module IndieLand
         @request.add_like(event_id)
       end
 
+      def search_events(event_name)
+        @request.get_search_events(event_name)
+      end
+
+      def list_event_comments(event_id)
+        @request.get_list_event_comments(event_id)
+      end
       # HTTP request transmitter
       # :reek:DuplicateMethodCall
       # :reek:UtilityFunction
@@ -76,6 +83,10 @@ module IndieLand
 
         def add_like(event_id)
           call_api('post', ['likes', event_id])
+        end
+        
+        def get_list_event_comments(event_id)
+          call_api('get', ['comments', event_id])
         end
 
         private

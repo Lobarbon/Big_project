@@ -25,15 +25,17 @@
             </div> 
 
             <!-- commit -->
-            <div class="h4 ">1234 Comments</div>
-            <div class="p-2 h3 border">
-                <div class="commit-bg">
-                    <div class="card-body">
-                        <h5 class="card-title">USER</h5>
-                        <p class="card-text  h6">Some quick example text to build on the card title and make up the bulk of the card's content.Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <div class="h4 ">Comments</div>
+            <% comments.each do |hash| %>
+                <div class="p-2 h3 border">
+                    <div class="commit-bg">
+                        <div class="card-body">
+                            <%# <h5 class="card-title">USER</h5> %>
+                            <p class="card-text  h6"><%== hash.comment %></p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <% end %>
             <!-- commit -->        
         </div>
     </div>

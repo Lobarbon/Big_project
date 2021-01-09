@@ -5,19 +5,19 @@ require_relative 'future_today_events'
 module Views
   # View Object Future Dates
   # :reek:DuplicateMethodCall
-  class QueryEvents
-    def initialize(query_events)
-      @query_events = query_events.map do |query_event|
-        QueryEvent.new(query_event)
+  class CommentList
+    def initialize(comment_list)
+      @comment_list = comment_list["comments"].map do |comment|
+        Comment.new(comment)
       end
     end
 
     def each(&block)
-      @query_events.each(&block)
+      @comment_list.each(&block)
     end
 
     def any?
-      @query_events.any?
+      @comment_list.any?
     end
   end
 end
