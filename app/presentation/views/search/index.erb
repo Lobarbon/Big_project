@@ -5,7 +5,7 @@
             <% query_events.each do |query_event| %>
                     <div class="p-2 h3 border-bottom border-warning">
                         <div class="block-bg">
-                            <a class="link-block" href=<%== query_event.id %>>
+                            <a class="link-block" href=<%== query_event.link %>>
                                 <div class="card-header"><%== query_event.name %></div>
                             </a>
                         </div>
@@ -15,8 +15,8 @@
         </div>
     </div>
     <div class="col-md-3 d-none d-sm-block" style="max-width: 20rem; width: 20rem;">
-        <form class="mt-3">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="mt-3" action="/events/search" method="get">
+            <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
         </form>
         <div class="mt-4 text-white h4 border-bottom">
             Top 5 Hot!!!

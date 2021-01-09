@@ -22,5 +22,9 @@ module Views
     def name
       @query_event.event_name
     end
+
+    def link
+      "../event/#{@query_event.event_id}"
+    end
   end
 end

@@ -10,7 +10,7 @@ module IndieLand
     # :reek:UncommunicativeVariableName
     # :reek:FeatureEnvy
     # :reek:DuplicateMethodCall
-    class SearchEvents
+    class ListComment
       include Dry::Transaction
 
       # step :validate_evnets
@@ -23,21 +23,21 @@ module IndieLand
       def retrieve_events(input)
         input[:logger].info('Calling Indie Land api and get json')
         result = Gateway::IndieLandApi.new(IndieLand::App.config)
-                                      .search(input[:eventname])
+                                      .list_event_comments(input[:event_id])
         result.success? ? Success(result.payload) : Failure(result.message)
       rescue StandardError => e
         input[:logger].error(e.backtrace.join("\n"))
-        Failure('Error occurs at calling Indie Land Api')
+        Failure('Error occurs at calling Indie Land Api comment')
       end
 
       # make json back into an object
-      def reify_events(events_json)
+      def reify_events(comments_json)
         # Success(events_json)
-        Representer::QueryEvents.new(OpenStruct.new)
-                                .from_json(events_json)
-                                .then { |query_events| Success(query_events) }
+        Representer::Comments.new(OpenStruct.new)
+                                .from_json(comments_json)
+                                .then { |comments_json| Success(comments_json) }
       rescue StandardError
-        Failure('Error in our events report  -- please try again')
+        Failure('Error in our comments event report  -- please try again')
       end
     end
   end

@@ -53,9 +53,9 @@ module IndieLand
       routing.on 'events' do
         routing.get 'search' do
           logger.info("User #{session[:user]} enter")
-          eventname = routing.params["q"]
-          sresult = Service::SearchEvents.new.call(eventname: eventname, logger: logger)
-          search_events = sresult.value!.query_events
+          event_name = routing.params["q"]
+          result = Service::SearchEvents.new.call(event_name: event_name, logger: logger)
+          search_events = result.value!.query_events
           
           viewable_events = Views::QueryEvents.new(search_events)
           
@@ -66,16 +66,22 @@ module IndieLand
       end
 
       routing.on 'event' do
+        @title = 'event'
         routing.get Integer do |event_id|
-          result = Service::EventSessions.new.call(event_id)
-          flash.now[:error] = result.failure if result.failure?
-          event_sessions = result.value!
-
+          # event session
+          event_result = Service::EventSessions.new.call(event_id)
+          flash.now[:error] = event_result.failure if event_result.failure?
+          event_sessions = event_result.value!
           viewable_event_sessions = Views::EventSessionsList.new(event_sessions)
           @website = viewable_event_sessions.website
-          @title = 'event'
+          
+          comments_result = Service::ListComment.new.call(event_id: event_id, logger: logger)
+          event_comments = comments_result.value!.event_id
+          viewable_event_comments = Views::CommentList.new(event_comments)
+        
           view 'event/index', locals: {
-            sessions: viewable_event_sessions
+            sessions: viewable_event_sessions,
+            comments: viewable_event_comments
           }
         end
       end

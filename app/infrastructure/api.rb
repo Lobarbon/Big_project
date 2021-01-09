@@ -24,10 +24,13 @@ module IndieLand
         @request.get_sessions(event_id)
       end
 
-      def search(event_name)
+      def search_events(event_name)
         @request.get_search_events(event_name)
       end
 
+      def list_event_comments(event_id)
+        @request.get_list_event_comments(event_id)
+      end
       # HTTP request transmitter
       # :reek:DuplicateMethodCall
       # :reek:UtilityFunction
@@ -52,6 +55,10 @@ module IndieLand
 
         def get_search_events(event_name)
           call_search_api('get', ['events/search', event_name])
+        end
+
+        def get_list_event_comments(event_id)
+          call_api('get', ['comments', event_id])
         end
 
         private
