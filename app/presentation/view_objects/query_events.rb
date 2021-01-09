@@ -7,19 +7,17 @@ module Views
   # :reek:DuplicateMethodCall
   class QueryEvents
     def initialize(query_events)
-      @future_events_dates = []
-
-      @query_events = query_events.map.with_index do |query_event, index|
-        QueryEvent.new(query_event, index)
+      @query_events = query_events.map do |query_event|
+        QueryEvent.new(query_event)
       end
     end
 
     def each(&block)
-      @future_events.each(&block)
+      @query_events.each(&block)
     end
 
     def any?
-      @future_events.any?
+      @query_events.any?
     end
   end
 end

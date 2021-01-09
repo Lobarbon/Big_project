@@ -21,21 +21,21 @@ module IndieLand
 
       # get json data from api
       def retrieve_events(input)
-        puts ('Calling Indie Land api and get json')
+        input[:logger].info('Calling Indie Land api and get json')
         result = Gateway::IndieLandApi.new(IndieLand::App.config)
-                                      .search(input)
+                                      .search(input[:eventname])
         result.success? ? Success(result.payload) : Failure(result.message)
       rescue StandardError => e
-        puts e.backtrace.join("\n")
+        input[:logger].error(e.backtrace.join("\n"))
         Failure('Error occurs at calling Indie Land Api')
       end
 
       # make json back into an object
       def reify_events(events_json)
-        Success(events_json)
-        # Representer::QueryEvents.new(OpenStruct.new)
-        #                         .from_json(events_json)
-        #                         .then { |query_events| Success(query_events) }
+        # Success(events_json)
+        Representer::QueryEvents.new(OpenStruct.new)
+                                .from_json(events_json)
+                                .then { |query_events| Success(query_events) }
       rescue StandardError
         Failure('Error in our events report  -- please try again')
       end

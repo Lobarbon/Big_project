@@ -18,10 +18,18 @@ module IndieLand
         "#{App.config.API_HOST}/api/v1/events/#{event_id}"
       end
 
+      link :comment do
+        "#{App.config.API_HOST}/api/v1/comments/#{event_id}"
+      end
+
       private
 
       def event_id
         represented.event_id
+      end
+
+      def event_name
+        represented.event_name
       end
     end
   end

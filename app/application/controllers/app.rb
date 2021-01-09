@@ -26,8 +26,8 @@ module IndieLand
       routing.hash_routes
 
       routing.root do
-        session[:user] ||= ''
         @title = 'home'
+        session[:user] ||= ''
         logger.info("User #{session[:user]} enter")
         # deal with user sessions
         result = Service::TrackUser.new.call(user_id: session[:user], logger: logger)
@@ -52,14 +52,16 @@ module IndieLand
 
       routing.on 'events' do
         routing.get 'search' do
-          response['Content-Type'] = 'application/json'
+          logger.info("User #{session[:user]} enter")
           eventname = routing.params["q"]
-          sresult = Service::SearchEvents.new.call(eventname)
-          events = sresult.value!
-          # result = Gateway::IndieLandApi.new(IndieLand::App.config).search(eventname)                      
-          # puts(events)
-          # response.status 200
-          events
+          sresult = Service::SearchEvents.new.call(eventname: eventname, logger: logger)
+          search_events = sresult.value!.query_events
+          
+          viewable_events = Views::QueryEvents.new(search_events)
+          
+          view 'search/index', locals: {
+            query_events: viewable_events,
+          }
         end
       end
 
