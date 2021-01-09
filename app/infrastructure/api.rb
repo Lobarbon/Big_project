@@ -24,6 +24,10 @@ module IndieLand
         @request.get_sessions(event_id)
       end
 
+      def search_name(query)
+        @request.get_search_name(query)
+      end
+
       # HTTP request transmitter
       # :reek:DuplicateMethodCall
       # :reek:UtilityFunction
@@ -46,6 +50,10 @@ module IndieLand
           call_api('get', ['events', event_id])
         end
 
+        def get_search_name(query)
+          call_api('get', ['events','search'], '?q' => query)
+        end
+
         private
 
         def params_str(params)
@@ -56,6 +64,7 @@ module IndieLand
         def call_api(method, resources = [], params = {})
           api_path = resources.empty? ? @api_host : @api_root
           url = [api_path, resources].flatten.join('/') + params_str(params)
+          puts url
           HTTP.headers('Accept' => 'application/json').send(method, url)
               .then { |http_response| Response.new(http_response) }
         rescue StandardError

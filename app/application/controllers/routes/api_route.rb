@@ -35,6 +35,16 @@ module IndieLand
           end
         end
 
+        # Events date find info
+        routing.on 'search' do
+          routing.get do
+            query = CGI.unescape(routing.params)
+            puts query
+            events = IndieLand::Repository::Events.query_events(query)
+            events.nil? ? '' : events.map(&:to_attr_hash).to_json
+          end
+        end
+
         # # Load previously viewed projects
         # routing.on 'viewobj' do
         #   future_events = IndieLand::Repository::Events.future_events
