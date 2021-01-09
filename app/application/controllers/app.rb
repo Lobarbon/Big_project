@@ -58,9 +58,10 @@ module IndieLand
           search_events = result.value!.query_events
           
           viewable_events = Views::QueryEvents.new(search_events)
-          
+
           view 'search/index', locals: {
             query_events: viewable_events,
+            event_name: event_name
           }
         end
       end
