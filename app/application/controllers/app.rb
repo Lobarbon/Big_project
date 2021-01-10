@@ -51,7 +51,7 @@ module IndieLand
       end
 
       routing.on 'likes' do
-        # POST /likes/1
+        # GET /likes/event_id
         routing.get Integer do |event_id|
           result = Service::ListLikes.new.call(event_id)
           flash.now[:error] = result.failure if result.failure?
@@ -59,22 +59,24 @@ module IndieLand
         end
 
         # like that event
-        # GET /likes/1
+        # POST /likes/event_id
         routing.post Integer do |event_id|
           result = Service::LikeEvent.new.call(event_id)
           flash.now[:error] = result.failure if result.failure?
           message = result.value!
-          # puts result
+          
+          render('foo', views: "event/index")
         end
       end
 
       routing.on 'comments' do
         routing.post Integer do |event_id|
-          response['Content-Type'] = 'application/json'
           comment = routing.params["q"]
           result = Service::CommentEvent.new.call(event_id: event_id, comment: comment)
           flash.now[:error] = result.failure if result.failure?
           message = result.value!
+
+          # routing.render("event/#{event_id}") 
         end
       end
 
@@ -97,20 +99,25 @@ module IndieLand
       routing.on 'event' do
         @title = 'event'
         routing.get Integer do |event_id|
-          # event session
+          # Event session
           event_result = Service::EventSessions.new.call(event_id)
-          flash.now[:error] = event_result.failure if event_result.failure?
           event_sessions = event_result.value!
           viewable_event_sessions = Views::EventSessionsList.new(event_sessions)
-          @website = viewable_event_sessions.website
           
+          # Comments
           comments_result = Service::ListComment.new.call(event_id: event_id, logger: logger)
           event_comments = comments_result.value!.event_id
           viewable_event_comments = Views::CommentList.new(event_comments)
-        
+          
+          # Like
+          like_result = Service::ListLikes.new.call(event_id)
+          event_like = like_result.value!
+          viewable_event_like = Views::Like.new(event_like)
+          
           view 'event/index', locals: {
             sessions: viewable_event_sessions,
-            comments: viewable_event_comments
+            comments: viewable_event_comments,
+            event: viewable_event_like
           }
         end
       end

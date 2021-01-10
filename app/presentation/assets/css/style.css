@@ -17,7 +17,7 @@ html, body{
 }
 
 .top-scroll{
-    height: 60vh;
+    height: 50vh;
     overflow: auto;
 }
 .top-scroll::-webkit-scrollbar {

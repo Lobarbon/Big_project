@@ -33,10 +33,9 @@ module IndieLand
 
       # make json back into an object
       def reify_like(event_like_json)
-        Success(event_like_json)
-        # Representer::Like.new(OpenStruct.new)
-        #                           .from_json(event_like_json)
-        #                           .then { |event_like| Success(event_like) }
+        Representer::Like.new(OpenStruct.new)
+                                  .from_json(event_like_json)
+                                  .then { |event_like| Success(event_like) }
       rescue StandardError
         Failure('Error in our events report  -- please try again')
       end
