@@ -1,9 +1,0 @@
-<% future_events.each do |event|%> 
-    <h1><%== event.date %></h1>
-    <% event.each do |brief_hash|%>
-    <div>
-        <h2><%== brief_hash.event_id %></h3>
-        <h2><%== brief_hash.event_name %></h3>
-    </div>
-    <% end %>
-<% end %>

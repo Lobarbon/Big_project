@@ -33,6 +33,11 @@
 ### Installation
 If you don't have [Ruby] (2.7.1) please download.
 
+Setup
+```
+
+```
+
 Step1. Clone the [Indie-Land].
 ```bash=
 $ git clone https://github.com/Lobarbon/Indie-Land.git
@@ -48,6 +53,7 @@ Step3. Install ``Gemfile`` package.
 ```bash=
 $ bundle install
 ```
+
 ### Running the Application
 Running a Roda application is similar to running any other rack-based application that uses a ``config.ru`` file. You can start a basic server using ``rackup``:
 ```bash=

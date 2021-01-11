@@ -15,6 +15,18 @@ module Views
       @event.event_name
     end
 
+    def comment_action
+      "/comments/#{@event.event_id}"
+    end
+
+    def like_action
+      "../likes/#{@event.event_id}"
+    end
+
+    def date
+      @sessions[0].start_time
+    end
+
     def website
       @event.event_website
     end
