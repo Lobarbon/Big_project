@@ -7,15 +7,15 @@ module Views
   # :reek:DuplicateMethodCall
   class Like
     def initialize(event)
-        @event = event
+      @event = event
     end
 
     def id
-        @event.event_id
+      @event.event_id
     end
 
     def like_num
-        @event.like_num
+      @event.like_num
     end
   end
 end

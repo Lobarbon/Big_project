@@ -1,7 +1,11 @@
 # frozen_string_literal: true
+
 require 'time'
 
 module Views
+  # :reek:RepeatedConditional
+  # :reek:UncommunicativeVariableName
+
   # View for a single session entity
   class Session
     def initialize(session, index = nil)
@@ -15,12 +19,12 @@ module Views
 
     def start_time
       d = DateTime.parse(@session.start_time)
-      d.strftime("%Y-%m-%d")
+      d.strftime('%Y-%m-%d')
     end
 
     def end_time
       d = DateTime.parse(@session.end_time)
-      d.strftime("%Y-%m-%d")
+      d.strftime('%Y-%m-%d')
     end
 
     def address

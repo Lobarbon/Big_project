@@ -6,12 +6,12 @@ module Views
   # View Object Future Dates
   # :reek:DuplicateMethodCall
   class Comment
-    def initialize(comment, index = nil)
+    def initialize(comment, _index = nil)
       @comment = comment
     end
 
     def comment
-      @comment["comment"]
+      @comment['comment']
     end
   end
 end

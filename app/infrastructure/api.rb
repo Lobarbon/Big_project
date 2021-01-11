@@ -5,6 +5,12 @@ require 'http'
 
 module IndieLand
   module Gateway
+    # :reek:UncommunicativeVariableName
+    # :reek:RepeatedConditional
+    # :reek:FeatureEnvy
+    # :reek:DataClump
+    # :reek:UncommunicativeVariableName
+
     # Infrastructure to call Indie Land API
     class IndieLandApi
       def initialize(config)
@@ -47,6 +53,7 @@ module IndieLand
       def list_event_comments(event_id)
         @request.get_list_event_comments(event_id)
       end
+
       # HTTP request transmitter
       # :reek:DuplicateMethodCall
       # :reek:UtilityFunction
@@ -84,7 +91,7 @@ module IndieLand
         def add_like(event_id)
           call_api('post', ['likes', event_id])
         end
-        
+
         def get_list_event_comments(event_id)
           call_api('get', ['comments', event_id])
         end
@@ -105,7 +112,7 @@ module IndieLand
           raise "Invalid URL request: #{url}"
         end
 
-        def call_search_api(method, resources = [], params = {})
+        def call_search_api(method, resources = [], _params = {})
           api_path = resources.empty? ? @api_host : @api_root
           url = "#{api_path}/#{resources[0]}?q=#{resources[1]}"
           HTTP.headers('Accept' => 'application/json').send(method, url)
@@ -114,7 +121,7 @@ module IndieLand
           raise "Invalid URL request: #{url}"
         end
 
-        def call_comment_api(method, resources = [], params = {})
+        def call_comment_api(method, resources = [], _params = {})
           api_path = resources.empty? ? @api_host : @api_root
           url = "#{api_path}/#{resources[0]}/#{resources[1]}?q=#{resources[2]}"
           puts url
@@ -124,32 +131,32 @@ module IndieLand
           raise "Invalid URL request: #{url}"
         end
 
-      # Decorates HTTP responses with success/error
-      # :reek:TooManyStatements
-      class Response < SimpleDelegator
-        # Define error
-        NotFound = Class.new(StandardError)
+        # Decorates HTTP responses with success/error
+        # :reek:TooManyStatements
+        class Response < SimpleDelegator
+          # Define error
+          NotFound = Class.new(StandardError)
 
-        SUCCESS_CODES = (200..299).freeze
+          SUCCESS_CODES = (200..299).freeze
 
-        def success?
-          code.between?(SUCCESS_CODES.first, SUCCESS_CODES.last)
-        end
-        
-        def processing?
-          code==202
-        end
+          def success?
+            code.between?(SUCCESS_CODES.first, SUCCESS_CODES.last)
+          end
 
-        def message
-          payload['message']
-          # JSON.parse(payload)['message']
-        end
+          def processing?
+            code == 202
+          end
 
-        def payload
-          body.to_s
+          def message
+            payload['message']
+            # JSON.parse(payload)['message']
+          end
+
+          def payload
+            body.to_s
+          end
         end
       end
     end
   end
-end
 end

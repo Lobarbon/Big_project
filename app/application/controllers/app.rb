@@ -55,6 +55,7 @@ module IndieLand
           result = Service::ListLikes.new.call(event_id)
           flash.now[:error] = result.failure if result.failure?
           event_like = result.value!
+          event_like
         end
 
         # like that event
@@ -62,8 +63,7 @@ module IndieLand
         routing.post Integer do |event_id|
           result = Service::LikeEvent.new.call(event_id)
           flash.now[:error] = result.failure if result.failure?
-          message = result.value!
-          
+
           routing.redirect "/event/#{event_id}"
         end
       end
@@ -73,15 +73,15 @@ module IndieLand
         routing.get Integer do |event_id|
           comments_result = Service::ListComment.new.call(event_id: event_id, logger: logger)
           event_comments = comments_result.value!.event_id
+          event_comments
         end
-        
+
         # POST comments/event_id?q=msg
         routing.post Integer do |event_id|
-          comment = routing.params["q"]
+          comment = routing.params['q']
           result = Service::CommentEvent.new.call(event_id: event_id, comment: comment)
           flash.now[:error] = result.failure if result.failure?
-          message = result.value!
-          
+
           routing.redirect "/event/#{event_id}"
         end
       end
@@ -89,10 +89,10 @@ module IndieLand
       routing.on 'events' do
         routing.get 'search' do
           logger.info("User #{session[:user]} enter")
-          event_name = routing.params["q"]
+          event_name = routing.params['q']
           result = Service::SearchEvents.new.call(event_name: event_name, logger: logger)
           search_events = result.value!.query_events
-          
+
           viewable_events = Views::QueryEvents.new(search_events)
 
           view 'search/index', locals: {
@@ -109,18 +109,19 @@ module IndieLand
           event_result = Service::EventSessions.new.call(event_id)
           event_sessions = event_result.value!
           viewable_event_sessions = Views::EventSessionsList.new(event_sessions)
-          
+
           # Comments
           comments_result = Service::ListComment.new.call(event_id: event_id, logger: logger)
           comments = OpenStruct.new(comments_result.value!)
           viewable_event_comments = Views::CommentList.new(comments[:response])
-          
+
           # if comments.response.processing?
           #   flash.now[:notice] = 'The project is being appraised'
           # else
           #   viewable_event_comments = Views::CommentList.new(comments[:response])
           #   response.expires(60, public: true) if App.environment == :produciton
           # end
+
           processing = Views::CommentProcessing.new(
             App.config, comments.response
           )
@@ -129,7 +130,7 @@ module IndieLand
           like_result = Service::ListLikes.new.call(event_id)
           event_like = like_result.value!
           viewable_event_like = Views::Like.new(event_like)
-          
+
           view 'event/index', locals: {
             sessions: viewable_event_sessions,
             comments: viewable_event_comments,

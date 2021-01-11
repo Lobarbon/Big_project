@@ -7,8 +7,8 @@ module Views
   # :reek:DuplicateMethodCall
   class CommentList
     def initialize(event)
-      @event = JSON.parse(event)["event_id"]
-      @comment_list = @event["comments"].map do |comment|
+      @event = JSON.parse(event)['event_id']
+      @comment_list = @event['comments'].map do |comment|
         Comment.new(comment)
       end
     end
