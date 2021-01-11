@@ -79,10 +79,11 @@ module IndieLand
         # POST comments/event_id?q=msg
         routing.post Integer do |event_id|
           comment = routing.params['q']
-          result = Service::CommentEvent.new.call(event_id: event_id, comment: comment)
+          result = Service::CommentEvent.new.call(event_id: event_id, comment: comment, logger: logger)
           flash.now[:error] = result.failure if result.failure?
+          comment_result = OpenStruct.new(result.value!)
 
-          routing.redirect "/event/#{event_id}"
+          routing.redirect "/event/#{event_id}?r=#{comment_result.response}"
         end
       end
 
@@ -121,11 +122,12 @@ module IndieLand
           #   viewable_event_comments = Views::CommentList.new(comments[:response])
           #   response.expires(60, public: true) if App.environment == :produciton
           # end
-
+          
           processing = Views::CommentProcessing.new(
-            App.config, comments.response
+            App.config, routing.params['r']
           )
 
+          puts "WOWO::::#{processing.in_progress?}"
           # Like
           like_result = Service::ListLikes.new.call(event_id)
           event_like = like_result.value!

@@ -105,7 +105,6 @@ module IndieLand
         def call_api(method, resources = [], params = {})
           api_path = resources.empty? ? @api_host : @api_root
           url = [api_path, resources].flatten.join('/') + params_str(params)
-          puts(url)
           HTTP.headers('Accept' => 'application/json').send(method, url)
               .then { |http_response| Response.new(http_response) }
         rescue StandardError
@@ -124,7 +123,6 @@ module IndieLand
         def call_comment_api(method, resources = [], _params = {})
           api_path = resources.empty? ? @api_host : @api_root
           url = "#{api_path}/#{resources[0]}/#{resources[1]}?q=#{resources[2]}"
-          puts url
           HTTP.headers('Accept' => 'application/json').send(method, url)
               .then { |http_response| Response.new(http_response) }
         rescue StandardError
@@ -148,8 +146,9 @@ module IndieLand
           end
 
           def message
-            payload['message']
-            # JSON.parse(payload)['message']
+            payload
+            # puts type(payload)
+            # puts JSON.parse(payload.to_json)['message']
           end
 
           def payload

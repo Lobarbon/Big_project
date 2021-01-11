@@ -1,3 +1,6 @@
+<script src="<%== processing.ws_javascript %>"></script>
+
+
 <div class="col border-left border-right border-warning">
     <div class="d-flex flex-column text-white">
         <div class="p-2 h3 mb-4 border-bottom border-warning">Event </div>
@@ -20,7 +23,7 @@
                                     </div>
                                 </div>
                                 <div class="progress" style="height: 2px;">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </form>
                         </footer>
@@ -73,3 +76,37 @@
         <input type="submit" id="like" style="visibility:hidden">
     </form>
 </div>
+
+
+<script>
+    var channel = "<%== processing.ws_channel_id %>";
+    var client = new Faye.Client("<%== processing.ws_route %>");
+    var bar = document.getElementsByClassName("progress-bar")[0];
+    var reg = /\:(\d+)%/
+    console.log(channel)
+    console.log(client)
+    client.subscribe('/' + channel, function(message) {
+      // Collect progressbar element and percentage
+      var progress = bar.getAttribute("style")
+    //   var currentProgress = reg.exec(progress)[1]
+      console.log("DDDDDD")
+      console.log(message)
+      if (isNaN(message)) {
+        bar.setAttribute("style", "width:100%")
+        bar.setAttribute("class", "progress-bar bg-danger progress-bar-striped")
+      } else {
+        if (parseInt(message)) {
+          // Set the progress bar and percentage
+          bar.setAttribute("aria-valuenow", message)
+          bar.setAttribute("style", "width:"+message+"%")
+          // Reload page at 100%
+          if (message == "100") {
+            setTimeout(function () {
+              window.location = window.location.href
+            }, 1000);
+          }
+        }
+      }
+    });
+</script>
+
