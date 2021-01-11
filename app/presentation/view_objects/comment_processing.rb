@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 module Views
+  # :reek:NilCheck
   # :reek:RepeatedConditional
   # View object to capture progress bar information
   class CommentProcessing
     def initialize(config, response)
-      if response.nil?
-        @response = ""
-      else
-        @response = JSON.parse(response)
-      end
+      @response = if response.nil?
+                    ''
+                  else
+                    JSON.parse(response)
+                  end
 
-      
       @config = config
     end
 
     def in_progress?
-      @response["status"] == "processing" ? true : false
+      @response['status'] == 'processing'
     end
 
     def ws_channel_id

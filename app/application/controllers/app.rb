@@ -122,7 +122,7 @@ module IndieLand
           #   viewable_event_comments = Views::CommentList.new(comments[:response])
           #   response.expires(60, public: true) if App.environment == :produciton
           # end
-          
+
           processing = Views::CommentProcessing.new(
             App.config, routing.params['r']
           )

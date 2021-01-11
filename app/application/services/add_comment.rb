@@ -19,11 +19,13 @@ module IndieLand
 
       private
 
+      # rubocop:disable Lint/MissingCopEnableDirective
+      # rubocop:disable Metrics/AbcSize
       # get json data from api
       def add_comment(input)
         input[:logger].info('Calling Indie Land api and get json')
         input[:response] = Gateway::IndieLandApi.new(IndieLand::App.config)
-                                      .add_comment(input)
+                                                .add_comment(input)
         input[:response].success? ? Success(input) : Failure(input[:response].message)
       rescue StandardError => e
         input[:logger].error(e.backtrace.join("\n"))
