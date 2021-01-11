@@ -30,14 +30,14 @@ module IndieLand
         session[:user] ||= ''
         logger.info("User #{session[:user]} enter")
         # deal with user sessions
-        result = Service::TrackUser.new.call(user_id: session[:user], logger: logger)
-        if result.failure?
-          flash.now[:error] = result.failure
-          login_number = 0
-        else
-          session[:user] = result.value![:user_id]
-          login_number = result.value![:login_number]
-        end
+        # result = Service::TrackUser.new.call(user_id: session[:user], logger: logger)
+        # if result.failure?
+        #   flash.now[:error] = result.failure
+        #   login_number = 0
+        # else
+        #   session[:user] = result.value![:user_id]
+        #   login_number = result.value![:login_number]
+        # end
 
         result = Service::GetEvents.new.call(logger: logger)
         flash.now[:error] = result.failure if result.failure?
@@ -45,8 +45,7 @@ module IndieLand
 
         viewable_events = Views::FutureEvents.new(future_events)
         view 'home/index', locals: {
-          future_events: viewable_events,
-          login_number: login_number
+          future_events: viewable_events
         }
       end
 
@@ -65,18 +64,25 @@ module IndieLand
           flash.now[:error] = result.failure if result.failure?
           message = result.value!
           
-          render('foo', views: "event/index")
+          routing.redirect "/event/#{event_id}"
         end
       end
 
       routing.on 'comments' do
+        # GET comments/event_id
+        routing.get Integer do |event_id|
+          comments_result = Service::ListComment.new.call(event_id: event_id, logger: logger)
+          event_comments = comments_result.value!.event_id
+        end
+        
+        # POST comments/event_id?q=msg
         routing.post Integer do |event_id|
           comment = routing.params["q"]
           result = Service::CommentEvent.new.call(event_id: event_id, comment: comment)
           flash.now[:error] = result.failure if result.failure?
           message = result.value!
-
-          # routing.render("event/#{event_id}") 
+          
+          routing.redirect "/event/#{event_id}"
         end
       end
 
@@ -106,9 +112,19 @@ module IndieLand
           
           # Comments
           comments_result = Service::ListComment.new.call(event_id: event_id, logger: logger)
-          event_comments = comments_result.value!.event_id
-          viewable_event_comments = Views::CommentList.new(event_comments)
+          comments = OpenStruct.new(comments_result.value!)
+          viewable_event_comments = Views::CommentList.new(comments[:response])
           
+          # if comments.response.processing?
+          #   flash.now[:notice] = 'The project is being appraised'
+          # else
+          #   viewable_event_comments = Views::CommentList.new(comments[:response])
+          #   response.expires(60, public: true) if App.environment == :produciton
+          # end
+          processing = Views::CommentProcessing.new(
+            App.config, comments.response
+          )
+
           # Like
           like_result = Service::ListLikes.new.call(event_id)
           event_like = like_result.value!
@@ -117,7 +133,8 @@ module IndieLand
           view 'event/index', locals: {
             sessions: viewable_event_sessions,
             comments: viewable_event_comments,
-            event: viewable_event_like
+            event: viewable_event_like,
+            processing: processing
           }
         end
       end

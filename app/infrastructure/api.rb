@@ -135,9 +135,14 @@ module IndieLand
         def success?
           code.between?(SUCCESS_CODES.first, SUCCESS_CODES.last)
         end
+        
+        def processing?
+          code==202
+        end
 
         def message
           payload['message']
+          # JSON.parse(payload)['message']
         end
 
         def payload

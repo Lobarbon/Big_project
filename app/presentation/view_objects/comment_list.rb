@@ -6,8 +6,9 @@ module Views
   # View Object Future Dates
   # :reek:DuplicateMethodCall
   class CommentList
-    def initialize(comment_list)
-      @comment_list = comment_list["comments"].map do |comment|
+    def initialize(event)
+      @event = JSON.parse(event)["event_id"]
+      @comment_list = @event["comments"].map do |comment|
         Comment.new(comment)
       end
     end

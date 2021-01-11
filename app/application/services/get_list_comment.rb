@@ -22,20 +22,22 @@ module IndieLand
       # get json data from api
       def retrieve_events(input)
         input[:logger].info('Calling Indie Land api and get json')
-        result = Gateway::IndieLandApi.new(IndieLand::App.config)
+        input[:response] = Gateway::IndieLandApi.new(IndieLand::App.config)
                                       .list_event_comments(input[:event_id])
-        result.success? ? Success(result.payload) : Failure(result.message)
+        input[:response].success? ? Success(input) : Failure(input[:response].message)
       rescue StandardError => e
         input[:logger].error(e.backtrace.join("\n"))
         Failure('Error occurs at calling Indie Land Api comment')
       end
 
       # make json back into an object
-      def reify_events(comments_json)
-        # Success(events_json)
-        Representer::Comments.new(OpenStruct.new)
-                                .from_json(comments_json)
-                                .then { |comments_json| Success(comments_json) }
+      def reify_events(input)
+        unless input[:response].processing?
+          Representer::Comments.new(OpenStruct.new)
+                                  .from_json(input[:response].payload)
+                                  .then { Success(input) }
+        end
+        Success(input)
       rescue StandardError
         Failure('Error in our comments event report  -- please try again')
       end
