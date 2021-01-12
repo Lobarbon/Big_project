@@ -8,7 +8,10 @@ module Views
   class CommentList
     def initialize(event)
       @event = JSON.parse(event)['event_id']
-      @comment_list = @event['comments'].map do |comment|
+      @re_event = []
+      @event['comments'].reverse_each { |comment| @re_event.append(comment) }
+      
+      @comment_list = @re_event.map do |comment|
         Comment.new(comment)
       end
     end
