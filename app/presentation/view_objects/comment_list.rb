@@ -10,7 +10,7 @@ module Views
       @event = JSON.parse(event)['event_id']
       @re_event = []
       @event['comments'].reverse_each { |comment| @re_event.append(comment) }
-      
+
       @comment_list = @re_event.map do |comment|
         Comment.new(comment)
       end
