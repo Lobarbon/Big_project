@@ -92,15 +92,13 @@
       if (isNaN(message)) {
         // Reload page at 100%
         bar.setAttribute("style", "width:100%")
+        location.reload();
       } else {
         if (parseInt(message)) {
           // Set the progress bar and percentage
           console.log(message)
           bar.setAttribute("aria-valuenow", message)
           bar.setAttribute("style", "width:"+message+"%")
-          if(parseInt(message) == 100){
-            location.reload();
-          }
         }
       }
     });
