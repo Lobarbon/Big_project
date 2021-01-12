@@ -16,6 +16,7 @@ module IndieLand
       property :event_website
       property :description
       property :sale_website
+      property :event_ticket_website
       property :source
       collection :sessions, extend: Representer::Session, class: OpenStruct
     end

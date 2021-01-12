@@ -31,6 +31,10 @@ module Views
       @event.event_website
     end
 
+    def ticket_website
+      @event.event_ticket_website
+    end
+
     def each(&block)
       @sessions.each(&block)
     end
