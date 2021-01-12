@@ -110,7 +110,6 @@ module IndieLand
           event_result = Service::EventSessions.new.call(event_id)
           event_sessions = event_result.value!
           viewable_event_sessions = Views::EventSessionsList.new(event_sessions)
-          puts event_result
           # Comments
           comments_result = Service::ListComment.new.call(event_id: event_id, logger: logger)
           comments = OpenStruct.new(comments_result.value!)
