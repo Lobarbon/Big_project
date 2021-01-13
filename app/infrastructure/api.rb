@@ -113,7 +113,7 @@ module IndieLand
 
         def call_search_api(method, resources = [], _params = {})
           api_path = resources.empty? ? @api_host : @api_root
-          url = "#{api_path}/#{resources[0]}?q=#{resources[1]}"
+          url = "#{api_path}/#{resources[0]}?q=#{CGI.escape(resources[1])}"
           HTTP.headers('Accept' => 'application/json').send(method, url)
               .then { |http_response| Response.new(http_response) }
         rescue StandardError
@@ -122,7 +122,7 @@ module IndieLand
 
         def call_comment_api(method, resources = [], _params = {})
           api_path = resources.empty? ? @api_host : @api_root
-          url = "#{api_path}/#{resources[0]}/#{resources[1]}?q=#{resources[2]}"
+          url = "#{api_path}/#{resources[0]}/#{resources[1]}?q=#{CGI.escape(resources[2])}"
           HTTP.headers('Accept' => 'application/json').send(method, url)
               .then { |http_response| Response.new(http_response) }
         rescue StandardError
