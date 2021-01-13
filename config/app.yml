@@ -15,5 +15,5 @@ app_test:
 
 production:
   # Infrastructure
-  API_HOST: https://indie-land-api.herokuapp.com/
+  API_HOST: https://indie-land-api.herokuapp.com
   
